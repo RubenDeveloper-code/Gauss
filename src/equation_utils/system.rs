@@ -5,7 +5,7 @@ pub const POSITIVE: f64 = 1.0;
 pub const NEGATIVE: f64 = -1.0;
 
 pub const STR_ZERO: &str = "0.0";
-pub mod equation {
+pub mod system {
     use super::*;
     use std::{collections::HashSet, ops::Add, ptr::eq};
     #[derive(Debug, Clone)]
@@ -142,6 +142,13 @@ pub mod equation {
                 .map(|term| term.variable.clone())
                 .collect();
         }
+        pub fn get_vector_of_variables_in_row(row_of_terms: Vec<Term>) -> Vec<String> {
+            return row_of_terms
+                .clone()
+                .into_iter()
+                .map(|term| term.variable.clone())
+                .collect();
+        }
         pub fn term_is_ready(equation: Vec<u8>, it: usize) -> bool {
             if utilities::is_last_element(equation.len(), it) {
                 true
@@ -217,6 +224,16 @@ pub mod equation {
             new_array.remove(index_row_to_replace);
             new_array.insert(index_row_to_replace, new_row);
             return new_array;
+        }
+        pub fn flip_rows_in_array<T: Clone>(
+            array: Vec<Vec<T>>, first_row: usize, second_row: usize,
+        ) -> Vec<Vec<T>> {
+            let mut flip_array = array.clone();
+            flip_array.remove(first_row);
+            flip_array.insert(first_row, array[second_row].clone());
+            flip_array.remove(second_row);
+            flip_array.insert(second_row, array[first_row].clone());
+            return flip_array;
         }
         pub fn build_term(constant: f64, variable: String, pos: i8) -> Term {
             let term = Term {

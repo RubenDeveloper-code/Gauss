@@ -1,8 +1,14 @@
 pub mod gauss {
+    use crate::equation_utils::exceptions::exceptions::array_is_invalid;
+
     use super::super::equation::*;
+    use super::super::exceptions::*;
     use super::super::misc_utils::*;
-    pub fn unknowns_from_system(array: Vec<Vec<equation::Term>>) -> Vec<equation::Unknown> {
-        return solve(array);
+    pub fn unknowns_from_system(array: Vec<Vec<equation::Term>>) -> Option<Vec<equation::Unknown>> {
+        if array_is_invalid(array.clone()) {
+            return None;
+        }
+        return Some(solve(array));
     }
     fn solve(array: Vec<Vec<equation::Term>>) -> Vec<equation::Unknown> {
         let (n, m) = equation::equation_utilities::get_array_dimentions(array.clone());
@@ -45,6 +51,9 @@ pub mod gauss {
 
         let mut diagonal: usize = 0;
         let mut n: usize = N;
+
+        array = fix_array_if_need(array.clone());
+
         loop {
             let pivot = get_pivot(array.clone(), diagonal);
             array = equation::equation_utilities::replace_row_in_array(
@@ -52,7 +61,6 @@ pub mod gauss {
                 pivot.clone(),
                 diagonal,
             );
-            println!("{:?}", pivot);
             loop {
                 let operated_row = solve_row(array.clone(), pivot.clone(), n, diagonal);
                 array = equation::equation_utilities::replace_row_in_array(
@@ -60,8 +68,6 @@ pub mod gauss {
                     operated_row,
                     n,
                 );
-                equation::print_array(array.clone());
-                println!("diagonal :{}", diagonal);
                 if n - 1 <= diagonal {
                     break;
                 } else {
@@ -76,6 +82,28 @@ pub mod gauss {
         }
         return array;
     }
+
+    fn fix_array_if_need(array: Vec<Vec<equation::Term>>) -> Vec<Vec<equation::Term>> {
+        let mut array = array;
+        loop {
+            let zeros_in_diagonal = exceptions::index_of_zeros_in_diagonal(array.clone());
+            if zeros_in_diagonal.is_empty() {
+                break;
+            }
+            let target: i8 = if zeros_in_diagonal.first().unwrap() + 1 >= array.len() {
+                -1
+            } else {
+                1
+            };
+            array = equation::equation_utilities::flip_rows_in_array(
+                array.clone(),
+                *zeros_in_diagonal.first().unwrap(),
+                (*zeros_in_diagonal.first().unwrap() as i8 + target) as usize,
+            );
+        }
+        return array;
+    }
+
     fn solve_row(
         array: Vec<Vec<equation::Term>>, pivot: Vec<equation::Term>, n: usize, diagonal: usize,
     ) -> Vec<equation::Term> {
