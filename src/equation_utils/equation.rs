@@ -10,13 +10,14 @@ pub mod equation {
     use std::{collections::HashSet, ops::Add, ptr::eq};
     #[derive(Debug, Clone)]
     pub struct Term {
-        constant: f64,
-        variable: String,
-        pos: i8,
+        pub constant: f64,
+        pub variable: String,
+        pub pos: i8,
     }
+    #[derive(Debug, Clone)]
     pub struct Unknown {
-        constant: f64,
-        variable: String,
+        pub constant: f64,
+        pub variable: String,
     }
 
     pub fn equation2array(system: Vec<Vec<u8>>) -> Vec<Vec<Term>> {
@@ -103,18 +104,24 @@ pub mod equation {
         }
         return equation_utilities::sort_terms_in_row(fixed_row_of_terms);
     }
+    pub fn print_array(array: Vec<Vec<Term>>) {
+        for row in array {
+            for term in row {
+                if term.pos == RIGHT {
+                    print!(" | ");
+                }
+                print!(" {} ", term.constant);
+            }
+            print!("\n");
+        }
+    }
 
     pub mod equation_utilities {
         use super::*;
-        pub fn get_array_dimentions(array: Vec<Vec<Term>>) -> (usize, usize) {
-            let mut n: usize = 0;
-            let mut m: usize = 0;
-            for (it, row) in array.clone().into_iter().enumerate() {
-                if row.len() > n {
-                    n = it;
-                }
-            }
-            m = array.len();
+        pub fn get_array_dimentions<T: Clone>(array: Vec<Vec<T>>) -> (usize, usize) {
+            let n = array.len() - 1;
+            let m = array[0].len() - 1;
+            println!("n {} m {}", n, m);
             return (n, m);
         }
         pub fn get_variables_in_array(array: Vec<Vec<Term>>) -> Vec<String> {
@@ -202,6 +209,22 @@ pub mod equation {
             sorted_row_of_terms.sort_by_key(|term| term.variable.clone());
             sorted_row_of_terms.sort_by_key(|term| term.pos);
             return sorted_row_of_terms;
+        }
+        pub fn replace_row_in_array<T: Clone>(
+            array: Vec<Vec<T>>, new_row: Vec<T>, index_row_to_replace: usize,
+        ) -> Vec<Vec<T>> {
+            let mut new_array = array.clone();
+            new_array.remove(index_row_to_replace);
+            new_array.insert(index_row_to_replace, new_row);
+            return new_array;
+        }
+        pub fn build_term(constant: f64, variable: String, pos: i8) -> Term {
+            let term = Term {
+                constant,
+                variable,
+                pos,
+            };
+            return term;
         }
     }
 }

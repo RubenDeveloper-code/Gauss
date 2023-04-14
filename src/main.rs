@@ -23,5 +23,7 @@ fn collect_data() -> Vec<Vec<u8>> {
 fn main() {
     let equation_system = collect_data();
     let array: Vec<Vec<equation::Term>> = equation::equation2array(equation_system);
-    print!("{:#?}", array);
+    equation::print_array(array.clone());
+    let unknowns = gauss::unknowns_from_system(array.clone());
+    gauss::print_unknows(unknowns);
 }
