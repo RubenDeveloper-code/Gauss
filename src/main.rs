@@ -5,7 +5,9 @@ use modules::misc_utils::*;
 use modules::system::*;
 
 fn main() {
-    println!("████████████████Ingrese sistema de ecuaciones██████████████████");
+    println!(
+        "▄▄▄▄▄▄▄▄▄▄▄▄▄▄Ingrese sistema de ecuaciones y tecle 'ok' cuando este listo▄▄▄▄▄▄▄▄▄▄▄▄▄"
+    );
     println!("Ejemplo x+y+z=0 ENTER 2x+....");
     let equation_system = misc_utils::collect_data();
     let array: Vec<Vec<system::Term>> = system::system2array(equation_system);

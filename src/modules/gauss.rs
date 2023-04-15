@@ -24,7 +24,7 @@ pub mod gauss {
     pub fn print_unknows(unknowns: Vec<Unknown>) {
         let mut unknowns = unknowns;
         unknowns.reverse();
-        println!("\n**********Resultados***********");
+        println!("\n▄▄▄▄▄▄▄▄▄Resultados▄▄▄▄▄▄▄▄▄▄");
         for unknown in unknowns {
             println!("{} = {}", unknown.variable, misc_utils::float2print(unknown.constant));
         }
