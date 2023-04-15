@@ -1,29 +1,17 @@
-mod equation_utils;
-use equation_utils::equation::*;
-use equation_utils::gauss::*;
+mod modules;
+use modules::array_utils::*;
+use modules::gauss::*;
+use modules::misc_utils::*;
+use modules::system::*;
 
-fn collect_data() -> Vec<Vec<u8>> {
-    let mut char_equations: Vec<Vec<u8>> = Default::default();
-
-    loop {
-        let mut buff = String::new();
-        let mut char_equation = Default::default();
-
-        std::io::stdin().read_line(&mut buff).unwrap();
-
-        if buff.trim().eq("ok") {
-            break;
-        } else {
-            char_equation = buff.trim().as_bytes().to_vec();
-            char_equations.push(char_equation);
-        }
-    }
-    char_equations
-}
 fn main() {
-    let equation_system = collect_data();
-    let array: Vec<Vec<equation::Term>> = equation::equation2array(equation_system);
-    equation::print_array(array.clone());
+    println!("████████████████Ingrese sistema de ecuaciones██████████████████");
+    println!("Ejemplo x+y+z=0 ENTER 2x+....");
+    let equation_system = misc_utils::collect_data();
+    let array: Vec<Vec<system::Term>> = system::system2array(equation_system);
+
+    array_utils::print_array(array.clone());
+
     match gauss::unknowns_from_system(array.clone()) {
         Some(unknowns) => gauss::print_unknows(unknowns),
         None => println!("No se puede resolver el sistema"),
