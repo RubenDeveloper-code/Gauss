@@ -114,9 +114,9 @@ pub mod gauss {
                 *zeros_in_diagonal.first().unwrap(),
                 (*zeros_in_diagonal.first().unwrap() as i8 + target) as usize,
             );
+            println!("\n>>Arreglo acomodado");
+            array_utils::print_array(array.clone());
         }
-        println!(">>Arreglo acomodado\n");
-        array_utils::print_array(array.clone());
         return array;
     }
 

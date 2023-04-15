@@ -12,6 +12,7 @@ fn main() {
     let equation_system = misc_utils::collect_data();
     let array: Vec<Vec<system::Term>> = system::system2array(equation_system);
 
+    println!("Matriz capturada");
     array_utils::print_array(array.clone());
 
     match gauss::unknowns_from_system(array.clone()) {
