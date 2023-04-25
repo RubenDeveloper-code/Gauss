@@ -133,7 +133,7 @@ pub mod gauss {
                 term
             })
             .collect();
-        println!("\n>{}R - {}R{}", m + 1, multiplier, diagonal + 1);
+        println!("\n>R{} - ({})R{}", m + 1, misc_utils::float2print(multiplier), diagonal + 1);
         return row;
     }
     fn get_pivot(array: Vec<Vec<system::Term>>, diagonal: usize) -> Vec<system::Term> {
